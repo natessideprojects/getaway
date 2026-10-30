@@ -1,0 +1,2 @@
+# getaway
+Flight planning app
