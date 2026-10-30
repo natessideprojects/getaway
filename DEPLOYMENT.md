@@ -24,3 +24,11 @@ Native dropdown options now have explicit dark text on a light background, with 
 Live coverage audit and hosted verification are recorded in the delivery update below. Exact flight coverage remains limited to what each configured provider returns. Secondary providers have controlled-response tests but no supplied live credentials. Native phone installation is still a device acceptance check.
 
 Live local audit: CHA, next 30 days, round trip, USD 150, Broader discovery issued three SerpApi requests and received 259 suggestions in total. None met the full date/budget filters. These are excluded provider suggestions, not an application truncation and not evidence that no such flights exist. Local private report: `test-results/coverage-live.json`. This audit used three discovery requests; previously configured local counters also include the user's own interactive searches.
+
+## Hosted verification
+
+The first application commit `8ddbfdc349026099f63ad8b3705d01e0f847ed8e` built successfully on Vercel and reached READY in about eight seconds. Production alias: `https://getaway-gules.vercel.app`. The hosted `/api/status` returned HTTP 200 with SerpApi configured and instance-scoped counters, confirming the deployed function can access its server-only environment variable without attempting a quota-file write. Existing unique-deployment URL authentication remains enabled; the production alias is reachable with the existing project protection settings.
+
+Computed styles were inspected in the deployed browser for all six selects: closed field `#1b211d` / text `#f2f2e8`, popup options `#f4f1e7` / text `#172017`, selected option `#f4cf48` / text `#172017`. Native popup overlays are not included in the in-app browser's page screenshots, so the evidence here is computed browser style plus control operation rather than an OS-popup screenshot.
+
+That browser check also exposed an older malformed option tag that made Today plain text instead of a selectable date preset. Corrected it and added a build-time malformed-closing-tag check. The follow-up source commit contains that correction. The remote build-events connector returned HTTP 404; deployment READY status and deployed HTTP/browser behavior are used as the direct verification evidence.
