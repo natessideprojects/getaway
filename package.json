@@ -1,0 +1,16 @@
+{
+  "name": "getaway-flight-finder",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env.local server.mjs",
+    "dev": "node --watch --env-file-if-exists=.env.local server.mjs",
+    "test": "node --test",
+    "test:live": "node --env-file-if-exists=.env.local scripts/live-check.mjs",
+    "build": "npm test && node scripts/build.mjs"
+  }
+}

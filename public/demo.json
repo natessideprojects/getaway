@@ -1,0 +1,11 @@
+[
+ {"destination":"MIA","price":80,"offset":2,"stay":4,"airline":"Sample Air","duration":118,"stops":0},
+ {"destination":"JFK","price":120,"offset":4,"stay":7,"airline":"Demo Airways","duration":139,"stops":0},
+ {"destination":"ORD","price":148,"offset":7,"stay":5,"airline":"Sample Air","duration":126,"stops":0},
+ {"destination":"CUN","price":219,"offset":10,"stay":7,"airline":"Demo Airways","duration":168,"stops":0},
+ {"destination":"LAX","price":268,"offset":14,"stay":6,"airline":"Sample Air","duration":286,"stops":0},
+ {"destination":"SJU","price":315,"offset":21,"stay":7,"airline":"Demo Airways","duration":340,"stops":1},
+ {"destination":"LHR","price":499,"offset":30,"stay":7,"airline":"Sample Air","duration":495,"stops":0},
+ {"destination":"CDG","price":500,"offset":38,"stay":7,"airline":"Demo Airways","duration":542,"stops":1},
+ {"destination":"HND","price":850,"offset":48,"stay":7,"airline":"Sample Air","duration":910,"stops":1}
+]

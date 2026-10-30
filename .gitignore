@@ -1,0 +1,7 @@
+.env*
+!.env.example
+.runtime/
+node_modules/
+test-results/
+.vercel/
+Getaway*.txt
