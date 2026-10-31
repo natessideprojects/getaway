@@ -1,3 +1,7 @@
+## Current update: date options across every timeframe
+
+Default searches now use actual outbound dates rather than filtering monthly deals. Short windows check each day; longer windows sample seven dates, with explicit coverage. Selected round-trip stays apply to both providers. Partial results survive failures, quota is reserved per network attempt, and per-date caching avoids repeated calls after budget changes. Monthly deals remains an optional single-request search. Current checks and hosted proof are recorded under ignored `test-results/`; historical sections below are superseded where they describe one-request defaults.
+
 # Getaway prototype verification — October 30, 2026
 
 Historical initial-prototype record. Current provider selection and carrier behavior supersede the Amadeus/fallback-only behavior below; see README.md and DEPLOYMENT.md. Amadeus Self-Service has been retired and is no longer part of the app.

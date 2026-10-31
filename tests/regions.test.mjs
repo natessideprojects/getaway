@@ -25,11 +25,11 @@ test('region is requested upstream and enforced for both providers, including un
   calls.push(url);if(url.includes('serpapi')){assert.equal(new URL(url).searchParams.get('arrival_area_id'),'/m/02j9z');return {ok:true,json:async()=>({search_parameters:{currency:'USD'},destinations:['LHR','JFK','ZZZ'].map(code=>({name:code,destination_airport:{code},flight_price:100,start_date:'2026-11-03',end_date:'2026-11-10'}))})};}
   return {ok:true,json:async()=>({success:true,data:['CDG','HND'].map(destination=>({destination,price:100,departure_at:'2026-11-03',return_at:'2026-11-10'}))})};
  }});
- const r=await engine.search({origin:'ATL',region:'EU'});assert.deepEqual(r.offers.map(o=>o.destination),['LHR','CDG']);assert.equal(calls.length,2);assert.equal(r.audit.returned,5);assert.equal(r.audit.excluded,3);assert.ok(r.notes.some(n=>n.includes('1 returned offers excluded because destination region is unknown')));
- await engine.search({origin:'ATL',region:'EU'});assert.equal(calls.length,2);
+ const r=await engine.search({strategy:'deals',origin:'ATL',region:'EU'});assert.deepEqual(r.offers.map(o=>o.destination),['LHR','CDG']);assert.equal(calls.length,2);assert.equal(r.audit.returned,5);assert.equal(r.audit.excluded,3);assert.ok(r.notes.some(n=>n.includes('1 returned offers excluded because destination region is unknown')));
+ await engine.search({strategy:'deals',origin:'ATL',region:'EU'});assert.equal(calls.length,2);
 });
 test('changing regions cannot reuse another region cache; Oceania does not send an unverified area ID',async()=>{
  const params=[];const engine=createEngine({env:{SERPAPI_KEY:'fake'},clock,fetcher:async url=>{params.push(new URL(url).searchParams);return {ok:true,json:async()=>({search_parameters:{currency:'USD'},destinations:[]})};}});
- for(const region of ['any','NA','SA','AF','AS','OC'])await engine.search({origin:'ATL',region});
+ for(const region of ['any','NA','SA','AF','AS','OC'])await engine.search({strategy:'deals',origin:'ATL',region});
  assert.equal(params.length,6);assert.deepEqual(params.map(p=>p.get('arrival_area_id')),[null,'/m/059g4','/m/06n3y','/m/0dg3n1','/m/0j0k',null]);
 });

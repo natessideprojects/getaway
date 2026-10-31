@@ -15,3 +15,6 @@ select option:checked{background-color:#f4cf48!important;color:#172017!important
 
 @media(max-width:1050px){.search-bottom{flex-wrap:wrap;gap:12px}.search-bottom>div{flex-wrap:wrap;gap:12px}}
 @media(max-width:600px){.search-bottom{align-items:flex-start}.search-bottom>div{width:100%;justify-content:flex-start}#region{font-size:13px}}
+
+.search-bottom{flex-wrap:wrap;gap:12px}.search-bottom>div{flex-wrap:wrap;justify-content:flex-end}
+@media(max-width:600px){.search-bottom>div{justify-content:flex-start}}

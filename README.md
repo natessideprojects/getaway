@@ -79,3 +79,9 @@ All dropdowns explicitly set popup background/text colors, avoiding the Windows 
 ## Destination regions
 
 Choose Anywhere or North America, South America, Europe, Africa, Asia or Oceania. Both providers apply the selection against arrival-airport geography. SerpApi also receives the corresponding arrival region where a verified region ID exists; Oceania and Travelpayouts filter returned suggestions locally. Unknown destinations are excluded from selected regions, with counts under Data sources. North America includes Central America and the Caribbean. Geography is a compact server-only [OurAirports public-domain snapshot](https://ourairports.com/data/); see `lib/data/README.md`. This filter does not make discovery exhaustive.
+
+## Date options (default)
+
+All timeframe presets now query actual departure dates instead of filtering monthly cheapest-date suggestions. Today/Tomorrow query one date; Next week and custom windows of up to seven days query every day. Longer windows sample seven evenly spaced dates including endpoints, limited to returns within 90 days. The checked dates and partial failures are displayed. Round trips use 3, 7 (default) or 14 nights; both sources are filtered to that stay.
+
+A search can consume up to seven SerpApi requests plus one Travelpayouts request. Each network request reserves quota. Date requests run with concurrency at most three after the first; completed dates survive errors/quota exhaustion and failed/unattempted dates are listed. Successful per-date responses cache for 15 minutes, including across budget changes. Monthly deals is an explicit one-request alternative. Neither mode is exhaustive flight inventory; Travelpayouts remains cached cheapest-fare data.
