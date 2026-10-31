@@ -13,17 +13,23 @@ npm start
 
 Open <http://localhost:3000>. Stop with Ctrl+C. `npm run dev` restarts Node on source changes. `npm test` runs the automated checks. `npm run test:live` makes up to two real searches (ATL / anytime / $500, LHR / next week / $500) and writes a nonsecret `test-results/live-report.json`. It records a blocker and uses zero provider requests without configured keys. Do not run the live script concurrently with the server: the local quota file is intended for one process at a time.
 
-## Keys and fallback
+## Providers and carrier selection
 
 The supplied SerpApi key is configured locally in ignored `.env.local`. It never goes to the browser. For a fresh copy, copy `.env.example` to `.env.local`, fill in credentials and restart. Do not copy `.env.example` over an existing key file.
 
-- SerpApi: `SERPAPI_KEY`. Standard discovery uses one `google_travel_explore` request. Broader discovery uses up to three: weekend / one-week / two-week buckets for round trips, or up to three departure months for one way. No detail fan-out.
-- Travelpayouts: optional `TRAVELPAYOUTS_TOKEN`. Standard discovery fetches one cached-fare page (up to 1,000 records). Broader discovery follows full pages up to three requests. A notice reports possible remaining pages when the request cap is hit. No credentials were supplied or live-tested for this provider.
-- Amadeus: optional `AMADEUS_CLIENT_ID`, `AMADEUS_CLIENT_SECRET`, `AMADEUS_ENV=test` or `production`. One discovery call, plus one OAuth request if a token needs refreshing. Test responses are explicitly labeled SANDBOX, not real inventory. Inspiration commonly returns EUR; select EUR. Responses in a different/unverified currency are rejected, never numerically compared to your budget. No live credentials supplied for this provider.
+- SerpApi: `SERPAPI_KEY`. One `google_travel_explore` request, with one-week stay suggestions for round trips. No automatic detail requests.
+- Travelpayouts: `TRAVELPAYOUTS_TOKEN`. One cached-fare discovery page (up to 1,000 returned records). If the page is full, the UI warns that more provider records may exist.
+- Amadeus Self-Service is retired and has been removed from the runtime, UI and key template. Old Amadeus environment variables, if present, are ignored.
 
-Automatic order is SerpApi → Travelpayouts → Amadeus. Empty filtered responses, errors, timeouts, rejected keys and exhausted quotas trigger the next configured adapter with visible notices. With a failed live search, no invented prices are substituted. Choose Demo data explicitly to inspect fictional fares. Without any configured provider the app automatically displays labeled demo data.
+**Both providers** is the default: every configured provider is searched once and all its matching offers are merged and sorted by price. A successful SerpApi response no longer prevents Travelpayouts from running. Per-row labels and per-provider counts show which service supplied each offer. **SerpApi only** and **Travelpayouts only** allow explicit source selection without spending the other provider's quota. Selecting an unconfigured provider shows an error, not demo inventory. Demo is automatic only when Both providers is selected and neither provider is configured; it can also be selected explicitly.
 
-SerpApi's official pricing was checked on October 30, 2026: free plan 250 searches/month, 50/hour. These are account limits, not a promise of 250 UI searches remaining. Local persistent counters in `.runtime/quota.json` count conservative discovery attempts (including failures). Monthly ceilings default to 250 / 100 / 100 respectively; secondary-provider defaults are app safeguards, **not their official quotas**. A reported upstream quota exhaustion stops further attempts for that provider until the next UTC calendar month. If an hourly limit or an earlier account renewal caused this, stop the server and clear only that provider's `:exhausted` entry in the local ledger after confirming account access has resumed. No automatic subscriptions or paid upgrades.
+The up-to-three-search control and request loops have been removed. Each uncached search makes at most one discovery request per selected configured service. The local app still reserves quota per actual request; a failed or exhausted provider does not block the other selected provider.
+
+The optional **Carrier** field accepts a two-character airline IATA code (for example `DL` for Delta). A small common-carrier list provides names, while manual valid codes remain supported. These are not verified carriers operating at the selected airport. SerpApi receives `include_airlines` so a requested carrier can be discovered upstream; Travelpayouts' cached-fare endpoint does not support that query filter, so its returned records are filtered locally. Quotes with no matching reported carrier code are excluded. Connecting segments may involve other airlines.
+
+The app does not reserve slots for Frontier, deduplicate by cheapest carrier, or remove more expensive carriers on the same route. Explore and cached-fare discovery themselves favor low prices and do not return every alternative airline, departure or itinerary. A carrier filter cannot recover offers that a source never returned, except by making a carrier-specific provider query where supported.
+
+SerpApi's official pricing was checked on October 30, 2026: free plan 250 searches/month, 50/hour. These are account limits, not a promise of 250 UI searches remaining. Local persistent counters in `.runtime/quota.json` count conservative discovery attempts (including failures). Monthly ceilings default to 250 for SerpApi and 100 for Travelpayouts; the latter is an app safeguard, **not its official quota**. A reported upstream quota exhaustion stops further attempts for that provider until the next UTC calendar month. If an hourly limit or an earlier account renewal caused this, stop the server and clear only that provider's `:exhausted` entry in the local ledger after confirming account access has resumed. No automatic subscriptions or paid upgrades.
 
 Results are cached in memory for 15 minutes (failure responses 30 seconds); identical simultaneous searches share one request. At most 100 normalized searches are cached. Opening/reloading the app or expanding a result spends no live quota. No account-balance endpoint is called. External links never contain API keys.
 
@@ -67,5 +73,5 @@ All dropdowns explicitly set popup background/text colors, avoiding the Windows 
 - [SerpApi Explore parameters and response](https://serpapi.com/google-travel-explore-api)
 - [SerpApi free tier and caching billing](https://serpapi.com/pricing)
 - [Travelpayouts Aviasales cached-fare API](https://support.travelpayouts.com/hc/en-us/articles/203956163-Aviasales-Data-API)
-- [Amadeus inspiration OpenAPI specification](https://github.com/amadeus4dev/amadeus-open-api-specification/blob/master/spec/json/FlightInspirationSearch_v1_swagger_specification.json)
-- [Amadeus coverage limitations](https://admin.developers.amadeus.com/self-service/apis-docs/guides/developer-guides/faq/)
+- [SerpApi upstream carrier parameters](https://serpapi.com/google-travel-explore-api)
+- [Amadeus Self-Service retirement notice](https://developers.amadeus.com/toolbox)

@@ -1,5 +1,15 @@
 # Getaway — GitHub and Vercel delivery
 
+## Current provider correction
+
+The up-to-three-search option is removed. Both providers now runs each configured source once and merges all matching offers, instead of stopping at the first successful SerpApi response. Explicit SerpApi-only and Travelpayouts-only modes are available. Returned offers carry their actual provider/source/freshness labels. Exhaustion or failure of one selected service does not prevent the other selected service from contributing.
+
+Optional carrier selection sends `include_airlines` to SerpApi. Travelpayouts carrier filtering is local because its selected cached-fare endpoint has no carrier query parameter. The common-carrier list does not claim airport-specific route coverage. No local cheapest-per-route reduction or carrier slot limit is applied. Discovery sources themselves are price-focused and incomplete. Removed retired Amadeus Self-Service integration and obsolete key-template entries.
+
+`npm run build` passes 26 tests including successful-source merging, preservation of a more expensive same-route carrier, explicit Travelpayouts selection, upstream carrier queries, returned-carrier checks, currency rejection, independent quota limits, and removal of multi-request/Amadeus paths. Existing date/budget/timezone, cache, URL and serverless checks also pass. Hosted verification is recorded separately in ignored test-results artifacts to avoid changing the exact source commit after it is deployed.
+
+The sections below preserve the earlier delivery history and are superseded where provider behavior differs.
+
 Requested October 30, 2026: verify returned-flight coverage, fix unreadable dropdowns, upload source to GitHub and verify a Vercel build.
 
 ## Reviewed source

@@ -1,5 +1,7 @@
 # Getaway prototype verification — October 30, 2026
 
+Historical initial-prototype record. Current provider selection and carrier behavior supersede the Amadeus/fallback-only behavior below; see README.md and DEPLOYMENT.md. Amadeus Self-Service has been retired and is no longer part of the app.
+
 Built in `C:\Users\Nathan\Documents\Getaway Flight Planer`, outside OneDrive. Original handoff and concept files preserved. Native HTML/CSS/JavaScript + Node, zero third-party runtime dependencies. No production deployment performed.
 
 ## Real SerpApi results
