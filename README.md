@@ -75,3 +75,7 @@ All dropdowns explicitly set popup background/text colors, avoiding the Windows 
 - [Travelpayouts Aviasales cached-fare API](https://support.travelpayouts.com/hc/en-us/articles/203956163-Aviasales-Data-API)
 - [SerpApi upstream carrier parameters](https://serpapi.com/google-travel-explore-api)
 - [Amadeus Self-Service retirement notice](https://developers.amadeus.com/toolbox)
+
+## Destination regions
+
+Choose Anywhere or North America, South America, Europe, Africa, Asia or Oceania. Both providers apply the selection against arrival-airport geography. SerpApi also receives the corresponding arrival region where a verified region ID exists; Oceania and Travelpayouts filter returned suggestions locally. Unknown destinations are excluded from selected regions, with counts under Data sources. North America includes Central America and the Caribbean. Geography is a compact server-only [OurAirports public-domain snapshot](https://ourairports.com/data/); see `lib/data/README.md`. This filter does not make discovery exhaustive.

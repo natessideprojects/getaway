@@ -1,3 +1,4 @@
+import {regions} from './regions.mjs';
 import { airports } from './airports.mjs';
 import { carriers } from './carriers.mjs';
 const $=id=>document.getElementById(id), form=$('search-form');let response=null,installPrompt=null;
@@ -28,14 +29,15 @@ async function search(){
   const params=new URLSearchParams(new FormData(form));params.set('origin',$('origin').value.trim().toUpperCase());
   const r=await fetch('/api/explore?'+params,{signal:AbortSignal.timeout(60000)});const d=await r.json();
   if(!r.ok)throw Error(d.error||'Search unavailable.');response=d;
-  $('route').textContent='from '+d.search.origin;$('sort').value='price';
+  $('route').textContent='from '+d.search.origin+(d.search.region!=='any'?' to '+regions.find(r=>r.code===d.search.region)?.name:'');$('sort').value='price';
   const problems=d.attempts.filter(a=>a.status!=='ok').map(a=>a.provider+': '+a.status.replaceAll('-',' ')).join(' · ');
   const notice=d.kind==='demo'?d.notes.join(' '):`Indicative fares from the selected sources. ${d.search.carrier?'Requested carrier '+d.search.carrier+'. ':''}${problems}${d.cached?' · From server cache; no new provider requests.':''}`;
   $('notice').innerHTML=`<strong>${esc(d.source.toUpperCase())}</strong> &nbsp; ${esc(notice)}`;
   $('notice').classList.toggle('error',d.kind==='unavailable');
   $('board-status').textContent=d.kind==='demo'?'DEMO DATA · FICTIONAL FARES':`INDICATIVE FARES · ${d.cached?'CACHED':'RETRIEVED'}`;
   const providers=d.attempts.map(a=>`${a.provider}: ${a.status==='ok'?a.matching+' matches / '+a.returned+' returned':a.status}`).join(' · ');
-  $('retrieval-summary').textContent=d.audit?`${d.audit.returned} provider offers retrieved · ${d.audit.matching} match dates, trip, currency, budget and carrier · ${d.audit.excluded} excluded · no local result cutoff. ${providers}. Discovery is not exhaustive.`:d.kind==='demo'?'Fictional demo offers, filtered to your search. No live inventory.':'No matching provider results. This does not mean no flights exist.';
+  const unknownRegions=d.search.region!=='any'?d.attempts.reduce((n,a)=>n+(a.unknownDestinationRegion||0),0):0;
+  $('retrieval-summary').textContent=d.audit?`${d.audit.returned} provider offers retrieved · ${d.audit.matching} match dates, trip, currency, budget, carrier and region · ${d.audit.excluded} excluded · no local result cutoff. ${providers}. ${unknownRegions?unknownRegions+' excluded with unknown destination region. ':''}Discovery is not exhaustive.`:d.kind==='demo'?'Fictional demo offers, filtered to your search. No live inventory.':'No matching provider results. This does not mean no flights exist.';
   $('coverage').textContent=`Departure range ${d.search.start} – ${d.search.end} (${d.search.timezone}). Returns no later than ${d.search.horizon}. ${d.notes.join(' ')} Cache TTL ${d.cacheTtlSeconds/60} minutes. USD and EUR are never compared. Retrieved ${d.checkedAt||'no provider fares checked'}.`;
   usage(d.usage);render();
  }catch(e){response=null;$('notice').textContent=e.name==='TimeoutError'?'Search timed out. Please try again.':e.message;$('notice').classList.add('error');$('results').innerHTML='<div class="empty">SEARCH UNAVAILABLE<br>Check your connection and search settings.</div>';$('retrieval-summary').textContent='Search did not complete.';$('result-count').textContent='— getaways';$('board-status').textContent='SEARCH UNAVAILABLE';}
