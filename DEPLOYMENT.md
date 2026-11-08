@@ -18,7 +18,7 @@ Requested October 30, 2026: verify returned-flight coverage, fix unreadable drop
 
 ## Reviewed source
 
-- Repository: `questforgelitrpg/getaway`, existing `main` branch. Its initial README commit is preserved as the parent of the application upload.
+- Repository: `natessideprojects/getaway`, existing `main` branch. Its initial README commit is preserved as the parent of the application upload.
 - Project: Vercel `getaway`, `prj_pfQ8tpiMQyjcm29Yb8Huemqj5RNt`, Nathan Hudson's projects. Existing deployment protection retained.
 - Runtime: Node 24, static assets in `public/`, one shared Web-standard Node function at `api/index.mjs`.
 - Secret: SerpApi key is a sensitive Vercel environment variable for Preview and Production. `.env.local`, runtime counters, original supplied TXT documents and local test artifacts are excluded from both source upload and deployment files.

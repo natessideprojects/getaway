@@ -60,7 +60,7 @@ On supported Chrome/Edge, use Install app; on iPhone Safari use Share → Add to
 
 ## Vercel
 
-The existing GitHub repository is [questforgelitrpg/getaway](https://github.com/questforgelitrpg/getaway), and the Vercel project is `getaway` in Nathan Hudson's projects. `vercel.json` selects Node 24 through project/package configuration, runs `npm run build` (tests plus PWA asset checks), serves only `public/`, and routes `/api/*` to `api/index.mjs`. The serverless entry uses the same provider engine as localhost without filesystem writes.
+The existing GitHub repository is [natessideprojects/getaway](https://github.com/natessideprojects/getaway), and the Vercel project is `getaway` in Nathan Hudson's projects. `vercel.json` selects Node 24 through project/package configuration, runs `npm run build` (tests plus PWA asset checks), serves only `public/`, and routes `/api/*` to `api/index.mjs`. The serverless entry uses the same provider engine as localhost without filesystem writes.
 
 Configure `SERPAPI_KEY` as a sensitive server-side Vercel environment variable; never put it in GitHub or public assets. The supplied key has been configured for Preview and Production. Existing Vercel deployment protection is preserved. Deployment verification is recorded in `DEPLOYMENT.md`.
 
